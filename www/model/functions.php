@@ -134,4 +134,8 @@ function is_valid_upload_image($image){
   }
   return true;
 }
+function h($str){
+  $result=htmlspecialchars($str);
+  return $result;
+}
 
