@@ -16,8 +16,11 @@ function get_item($db, $item_id){
     FROM
       items
     WHERE
-      item_id = {$item_id}
+      item_id = ?
   ";
+  $stmt=$db->prepare($sql);
+  $stmt->bindValue(1,$item_id,PDO::PARAM_INT);
+  $stmt->execure();
 
   return fetch_query($db, $sql);
 }
@@ -82,8 +85,14 @@ function insert_item($db, $name, $price, $stock, $filename, $status){
         image,
         status
       )
-    VALUES('{$name}', {$price}, {$stock}, '{$filename}', {$status_value});
+    VALUES(?, ?, ?, ?, {$status_value});
   ";
+  $stmt=$db->prepare($sql);
+  $stmt->bindValue(1,$name,PDO::PARAM_STR);
+  $stmt->bindValue(2,$price,PDO::PARAM_STR);
+  $stmt->bindValue(3,$stock,PDO::PARAM_INT);
+  $stmt->bindValue(4,$filename,PDO::PARAM_STR);
+  $stmt->execute();
 
   return execute_query($db, $sql);
 }
@@ -93,11 +102,15 @@ function update_item_status($db, $item_id, $status){
     UPDATE
       items
     SET
-      status = {$status}
+      status = ?
     WHERE
-      item_id = {$item_id}
+      item_id = ?
     LIMIT 1
   ";
+  $stmt=$db->prepare($sql);
+  $stmt->bindValue(1,$status,PDO::PARAM_INT);
+  $stmt->bindValue(2,$item_id,PDO::PARAM_INT);
+  $stmt->execute();
   
   return execute_query($db, $sql);
 }
@@ -107,11 +120,15 @@ function update_item_stock($db, $item_id, $stock){
     UPDATE
       items
     SET
-      stock = {$stock}
+      stock = ?
     WHERE
-      item_id = {$item_id}
+      item_id = ?
     LIMIT 1
   ";
+  $stmt=$db->prepare($sql);
+  $stmt->bindValue(1,$stock,PDO::PARAM_INT);
+  $stmt->bindValue(2,$item_id,PDO::PARAM_INT);
+  $stmt->execute();
   
   return execute_query($db, $sql);
 }
@@ -136,10 +153,12 @@ function delete_item($db, $item_id){
     DELETE FROM
       items
     WHERE
-      item_id = {$item_id}
+      item_id = ?
     LIMIT 1
   ";
-  
+  $stmt=$db->prepare($sql);
+  $stmt->bindValue(1,$item_id,PDO::PARAM_INT);
+  $stmt->execute();
   return execute_query($db, $sql);
 }
 
