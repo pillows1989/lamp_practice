@@ -139,3 +139,24 @@ function h($str){
   return $result;
 }
 
+function random_string($len){
+  if($len>128||$len<=0){
+    $len=128;
+  }
+  return substr(hash('sha512',uniqid()),0,$len);
+}
+
+function get_csrf_token(){
+  $token=random_string(48);
+  set_session(CSRF_TOKEN,$token);
+  return $token;
+}
+
+function is_valid_csrf_token($token){
+  if($token===''){
+    return false;
+  }
+  return $token===get_session(CSRF_TOKEN);
+}
+
+

@@ -43,8 +43,8 @@
           <option value="close">非公開</option>
         </select>
       </div>
-      
       <input type="submit" value="商品追加" class="btn btn-primary">
+
     </form>
 
 
