@@ -17,6 +17,7 @@ $user = get_login_user($db);
 
 $item_id = get_post('item_id');
 $token=get_post('token');
+
 if($item_id===false){
   set_message('不正な処理です');
 }
