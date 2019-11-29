@@ -26,7 +26,7 @@ if(is_valid_csrf_token($token)===false){
   set_error('不正な処理です');
 }
 
-if(has_error()){
+if(has_error()===false){
   if(add_cart($db,$user['user_id'], $item_id)){
     set_message('カートに商品を追加しました。');
   } else {
