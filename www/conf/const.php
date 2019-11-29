@@ -49,3 +49,4 @@ define('PERMITTED_IMAGE_TYPES', array(
   IMAGETYPE_JPEG => 'jpg',
   IMAGETYPE_PNG => 'png',
 ));
+define('CSRF_TOKEN','csrf_token');
