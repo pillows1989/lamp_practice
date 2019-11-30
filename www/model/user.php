@@ -15,7 +15,7 @@ function get_user($db, $user_id){
       user_id = ?
     LIMIT 1
   ";
-  $stmt=$dbh->prepare($sql);
+  $stmt=$db->prepare($sql);
   $stmt->bindValue(1,$user_id,PDO::PARAM_INT);
   $stmt->execute();
 
@@ -35,7 +35,7 @@ function get_user_by_name($db, $name){
       name = ?
     LIMIT 1
   ";
-  $stmt=$dbh->prepare($sql);
+  $stmt=$db->prepare($sql);
   $stmt->bindValue(1,$name,PDO::PARAM_STR);
   $stmt->execute();
 
@@ -112,7 +112,7 @@ function insert_user($db, $name, $password){
       users(name, password)
     VALUES (?, ?);
   ";
-  $stmt=$dbh->prepare($sql);
+  $stmt=$db->prepare($sql);
   $stmt->bindValue(1,$name,PDO::PARAM_STR);
   $stmt->bindValue(2,$password,PDO::PARAM_STR);
   $stmt->execute();
