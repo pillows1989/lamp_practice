@@ -23,10 +23,8 @@ function get_user_carts($db, $user_id){
     WHERE
       carts.user_id = ?
   ";
-  $stmt=$db->prepare($sql);
-  $stmt->bindValue(1,$user_id,PDO::PARAM_INT);
-  $stmt->execute();
-  return fetch_all_query($db, $sql);
+  
+  return fetch_all_query($db, $sql,array($user_id));
 }
 
 function get_user_cart($db, $user_id, $item_id){
@@ -52,12 +50,8 @@ function get_user_cart($db, $user_id, $item_id){
     AND
       items.item_id = ?
   ";
-  $stmt=$db->prepare($sql);
-  $stmt->bindValue(1,$user_id,PDO::PARAM_INT);
-  $stmt->bindValue(2,$item_id,PDO::PARAM_INT);
-  $stmt->execute();
 
-  return fetch_query($db, $sql);
+  return fetch_query($db, $sql,array($user_id,$item_id));
 
 }
 
@@ -79,13 +73,8 @@ function insert_cart($db, $item_id, $user_id, $amount = 1){
       )
     VALUES(?, ?, ?)
   ";
-  $stmt=$db->prepare($sql);
-  $stmt->bindValue(1,$item_id,PDO::PARAM_INT);
-  $stmt->bindValue(2,$user_id,PDO::PARAM_INT);
-  $stmt->bindValue(3,$amount,PDO::PARAM_INT);
-  $stmt->execute();
-
-  return execute_query($db, $sql);
+  
+  return execute_query($db, $sql,array($item_id,$user_id,$amount));
 }
 
 function update_cart_amount($db, $cart_id, $amount){
@@ -98,11 +87,8 @@ function update_cart_amount($db, $cart_id, $amount){
       cart_id = ?
     LIMIT 1
   ";
-  $stmt=$db->prepare($sql);
-  $stmt->bindvalue(1,$amount,PDO::PARAM_INT);
-  $stmt->bindValue(2,$cart_id,PDO::PARAM_INT);
-  $stmt->execute();
-  return execute_query($db, $sql);
+  
+  return execute_query($db, $sql,array($amount,$cart_id));
 }
 
 function delete_cart($db, $cart_id){
@@ -113,28 +99,54 @@ function delete_cart($db, $cart_id){
       cart_id = ?
     LIMIT 1
   ";
-  $stmt=$db->prepare($sql);
-  $stmt->bindValue(1,$cart_id,PDO::PARAM_INT);
-  $stmt->execute();
 
-  return execute_query($db, $sql);
+  return execute_query($db, $sql,array($cart_id));
 }
 
-function purchase_carts($db, $carts){
+function purchase_carts($db, $carts,$user){
   if(validate_cart_purchase($carts) === false){
     return false;
   }
+  $err_flag=false;
   foreach($carts as $cart){
+    $db->beginTransaction();
     if(update_item_stock(
         $db, 
         $cart['item_id'], 
         $cart['stock'] - $cart['amount']
       ) === false){
       set_error($cart['name'] . 'の購入に失敗しました。');
+      $err_flag=true;
+      break;
     }
+    
+    
+    if(insert_orders($db,$user)===false){
+      set_error('予期せぬエラーが発生しました');
+      $err_flag=true;
+      break;
+    }
+    if(insert_order_details($db,$cart)===false){
+      set_error('予期せぬエラーが発生しました');
+      $err_flag=true;
+      break;
+    }
+    
   }
+  if(delete_user_carts($db, $carts[0]['user_id'])===false){
+    set_error('予期せぬエラーが発生しました');
+      $err_flag=true;
+  }
+  if($err_flag){
+    $db->rollback();
+    return false;
+  }else{
+    $db->commit(); 
+  }
+return true;
+
   
-  delete_user_carts($db, $carts[0]['user_id']);
+  
 }
 
 function delete_user_carts($db, $user_id){
@@ -144,11 +156,8 @@ function delete_user_carts($db, $user_id){
     WHERE
       user_id = ?
   ";
-  $stmt=$db->prepare($sql);
-  $stmt->bindValue(1,$user_id,PDO::PARAM_INT);
-  $stmt->execute();
 
-  execute_query($db, $sql);
+  return execute_query($db, $sql,array($user_id));
 }
 
 
@@ -178,4 +187,26 @@ function validate_cart_purchase($carts){
   }
   return true;
 }
+function insert_orders($db,$user){
+  $now_date = date('Y-m-d H:i:s');
+  $sql="
+    INSERT INTO
+      orders(
+        user_name,
+        order_date
+      )
+    VALUES(?,?)";
+  return execute_query($db, $sql,array($user['name'],$now_date));
 
+}
+function insert_order_details($db,$carts){
+  $sql="
+    INSERT INTO
+      order_details(
+        product_id,
+        quantity,
+        price
+      )
+      VALUES(?,?,?)";
+      return execute_query($db, $sql,array($carts['item_id'],$carts['amount'],$carts['price']));
+}

@@ -15,14 +15,12 @@ function get_user($db, $user_id){
       user_id = ?
     LIMIT 1
   ";
-  $stmt=$db->prepare($sql);
-  $stmt->bindValue(1,$user_id,PDO::PARAM_INT);
-  $stmt->execute();
-
-  return fetch_query($db, $sql);
+  
+  return fetch_query($db, $sql,array($user_id));
 }
 
 function get_user_by_name($db, $name){
+  
   $sql = "
     SELECT
       user_id, 
@@ -35,11 +33,8 @@ function get_user_by_name($db, $name){
       name = ?
     LIMIT 1
   ";
-  $stmt=$db->prepare($sql);
-  $stmt->bindValue(1,$name,PDO::PARAM_STR);
-  $stmt->execute();
-
-  return fetch_query($db, $sql);
+  
+  return fetch_query($db, $sql,array($name));
 }
 
 function login_as($db, $name, $password){
@@ -112,10 +107,6 @@ function insert_user($db, $name, $password){
       users(name, password)
     VALUES (?, ?);
   ";
-  $stmt=$db->prepare($sql);
-  $stmt->bindValue(1,$name,PDO::PARAM_STR);
-  $stmt->bindValue(2,$password,PDO::PARAM_STR);
-  $stmt->execute();
-
-  return execute_query($db, $sql);
+  
+  return execute_query($db, $sql,array($name,$password));
 }
