@@ -13,7 +13,7 @@ if(is_logined() === false){
 
 $db = get_db_connect();
 $user = get_login_user($db);
-
+$orders = get_orders($db,$user);
 
 include_once '../view/history_view.php';
 ?>

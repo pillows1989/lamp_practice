@@ -108,8 +108,13 @@ function purchase_carts($db, $carts,$user){
     return false;
   }
   $err_flag=false;
+  $db->beginTransaction();
+  if(insert_orders($db,$user)===false){
+    set_error('予期せぬエラーが発生しました');
+    $err_flag=true;
+  }
   foreach($carts as $cart){
-    $db->beginTransaction();
+    
     if(update_item_stock(
         $db, 
         $cart['item_id'], 
@@ -121,11 +126,7 @@ function purchase_carts($db, $carts,$user){
     }
     
     
-    if(insert_orders($db,$user)===false){
-      set_error('予期せぬエラーが発生しました');
-      $err_flag=true;
-      break;
-    }
+    
     if(insert_order_details($db,$cart)===false){
       set_error('予期せぬエラーが発生しました');
       $err_flag=true;
