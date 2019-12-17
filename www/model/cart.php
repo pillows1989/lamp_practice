@@ -113,6 +113,7 @@ function purchase_carts($db, $carts,$user){
     set_error('予期せぬエラーが発生しました');
     $err_flag=true;
   }
+  $order_id=$db->lastInsertId();
   foreach($carts as $cart){
     
     if(update_item_stock(
@@ -127,7 +128,7 @@ function purchase_carts($db, $carts,$user){
     
     
     
-    if(insert_order_details($db,$cart)===false){
+    if(insert_order_details($db,$cart,$order_id)===false){
       set_error('予期せぬエラーが発生しました');
       $err_flag=true;
       break;
@@ -200,14 +201,15 @@ function insert_orders($db,$user){
   return execute_query($db, $sql,array($user['name'],$now_date));
 
 }
-function insert_order_details($db,$carts){
+function insert_order_details($db,$carts,$order_id){
   $sql="
     INSERT INTO
       order_details(
+        order_id,
         product_id,
         quantity,
         price
       )
-      VALUES(?,?,?)";
-      return execute_query($db, $sql,array($carts['item_id'],$carts['amount'],$carts['price']));
+      VALUES(?,?,?,?)";
+      return execute_query($db, $sql,array($order_id,$carts['item_id'],$carts['amount'],$carts['price']));
 }

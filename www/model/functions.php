@@ -230,3 +230,28 @@ function get_order_details($db,$order_id){
 
   return fetch_all_query($db, $sql, array($order_id));
 }
+function get_ranking($db){
+  $sql="
+    SELECT
+      item_id,
+      name,
+      image,
+      items.price,
+      stock,
+      SUM(quantity) as total
+    FROM
+      items
+    INNER JOIN
+      order_details
+    ON
+      item_id=product_id
+    GROUP BY
+      item_id
+    ORDER BY
+      total DESC
+    LIMIT
+    3";
+
+  return fetch_all_query($db, $sql);
+
+}
