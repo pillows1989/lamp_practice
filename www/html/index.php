@@ -15,4 +15,5 @@ $user = get_login_user($db);
 
 $items = get_open_items($db);
 $token = get_csrf_token();
+$ranks = get_ranking($db);
 include_once '../view/index_view.php';
