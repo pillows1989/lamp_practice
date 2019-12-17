@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- ホスト: mysql
--- 生成日時: 2019 年 12 月 14 日 07:40
+-- 生成日時: 2019 年 12 月 17 日 14:42
 -- サーバのバージョン： 5.7.28
 -- PHP のバージョン: 7.2.23
 
@@ -66,9 +66,12 @@ CREATE TABLE `items` (
 --
 
 INSERT INTO `items` (`item_id`, `name`, `stock`, `price`, `image`, `status`, `created`, `updated`) VALUES
-(32, 'hacked', 76, 18000, 'ny1owjn3yqs0cow8w4ws.jpg', 1, '2019-08-09 09:12:30', '2019-12-14 16:38:11'),
-(33, 'ハリネズミ', 18, 50000, '16scmunsexdwcosw88g0.jpg', 1, '2019-08-09 09:13:33', '2019-12-14 16:38:11'),
-(34, '<h1>テスト</h1>', 9, 100, '3f3717vald0kkgsocsko.jpg', 1, '2019-11-17 18:14:30', '2019-12-11 21:57:06');
+(32, '猫', 96, 18000, 'ny1owjn3yqs0cow8w4ws.jpg', 1, '2019-08-09 09:12:30', '2019-12-17 23:39:12'),
+(33, 'ハリネズミ', 98, 50000, '16scmunsexdwcosw88g0.jpg', 1, '2019-08-09 09:13:33', '2019-12-17 23:39:12'),
+(34, 'CD', 98, 100, '3f3717vald0kkgsocsko.jpg', 1, '2019-11-17 18:14:30', '2019-12-17 23:39:12'),
+(35, 'CD２', 100, 1000, '2gj10dg8ycg08sg8kock.jpg', 1, '2019-12-14 16:55:59', '2019-12-17 10:57:51'),
+(36, 'CD３', 100, 1200, '1u1cmb7n83c0kcwo8sco.jpg', 1, '2019-12-14 16:56:18', '2019-12-17 10:57:54'),
+(37, 'CD４', 100, 1300, '2o8eq8adxtc04c8cs004.jpg', 1, '2019-12-14 16:57:02', '2019-12-17 10:59:04');
 
 -- --------------------------------------------------------
 
@@ -109,7 +112,18 @@ INSERT INTO `orders` (`order_id`, `user_name`, `order_date`) VALUES
 (29, 'takemura', '2019-12-14 15:52:03'),
 (30, 'takemura', '2019-12-14 16:29:21'),
 (31, 'takemura', '2019-12-14 16:29:21'),
-(32, 'takemura', '2019-12-14 16:38:11');
+(32, 'takemura', '2019-12-14 16:38:11'),
+(33, 'admin', '2019-12-17 10:27:41'),
+(34, 'admin', '2019-12-17 10:53:47'),
+(35, 'admin', '2019-12-17 10:56:04'),
+(36, 'admin', '2019-12-17 10:58:37'),
+(37, 'admin', '2019-12-17 10:59:48'),
+(38, 'admin', '2019-12-17 11:00:12'),
+(39, 'admin', '2019-12-17 11:00:36'),
+(40, 'admin', '2019-12-17 11:01:22'),
+(41, 'takemura', '2019-12-17 23:06:35'),
+(42, 'takemura', '2019-12-17 23:07:55'),
+(45, 'takemura', '2019-12-17 23:39:12');
 
 -- --------------------------------------------------------
 
@@ -152,7 +166,21 @@ INSERT INTO `order_details` (`order_id`, `product_id`, `quantity`, `price`) VALU
 (30, 32, 1, 18000),
 (31, 33, 1, 50000),
 (32, 32, 1, 18000),
-(33, 33, 1, 50000);
+(33, 33, 1, 50000),
+(34, 37, 1, 1300),
+(35, 37, 1, 1300),
+(36, 37, 80, 1300),
+(37, 32, 70, 18000),
+(38, 33, 100, 50000),
+(39, 34, 100, 100),
+(40, 32, 100, 18000),
+(41, 34, 1, 100),
+(42, 32, 1, 18000),
+(43, 33, 1, 50000),
+(44, 32, 1, 18000),
+(45, 32, 2, 18000),
+(45, 33, 1, 50000),
+(45, 34, 1, 100);
 
 -- --------------------------------------------------------
 
@@ -222,25 +250,25 @@ ALTER TABLE `users`
 -- テーブルのAUTO_INCREMENT `carts`
 --
 ALTER TABLE `carts`
-  MODIFY `cart_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
+  MODIFY `cart_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
 
 --
 -- テーブルのAUTO_INCREMENT `items`
 --
 ALTER TABLE `items`
-  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- テーブルのAUTO_INCREMENT `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- テーブルのAUTO_INCREMENT `order_details`
 --
 ALTER TABLE `order_details`
-  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- テーブルのAUTO_INCREMENT `users`

@@ -111,6 +111,7 @@ function purchase_carts($db, $carts,$user){
   $db->beginTransaction();
   if(insert_orders($db,$user)===false){
     set_error('予期せぬエラーが発生しました');
+    set_error($db->error());
     $err_flag=true;
   }
   $order_id=$db->lastInsertId();
@@ -130,6 +131,7 @@ function purchase_carts($db, $carts,$user){
     
     if(insert_order_details($db,$cart,$order_id)===false){
       set_error('予期せぬエラーが発生しました');
+      set_error($db->error());
       $err_flag=true;
       break;
     }
@@ -137,6 +139,7 @@ function purchase_carts($db, $carts,$user){
   }
   if(delete_user_carts($db, $carts[0]['user_id'])===false){
     set_error('予期せぬエラーが発生しました');
+    set_error($db->error());
       $err_flag=true;
   }
   if($err_flag){

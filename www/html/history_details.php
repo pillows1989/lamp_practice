@@ -15,7 +15,6 @@ $db = get_db_connect();
 $user = get_login_user($db);
 $order_id = get_post('order_id');
 $order_details = get_order_details($db,$order_id);
-var_dump($order_id,$order_details);
 
 include_once '../view/history_details_view.php';
 ?>
